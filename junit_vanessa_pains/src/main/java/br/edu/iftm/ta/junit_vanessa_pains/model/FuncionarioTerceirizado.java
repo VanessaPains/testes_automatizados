@@ -13,10 +13,20 @@ public class FuncionarioTerceirizado extends Funcionario {
     //não ultrapassa o limite de 1000. Se a despesa for maior que 1000, ele lança
     //uma exceção IllegalArgumentException com uma mensagem de erro.
     public void setDespesaAdicional(double despesa) {
-        if (despesa > 1000) {//se dispesa for maior que 1000, ele lança uma exceção IllegalArgumentException com uma mensagem de erro.
+
+        if (despesa < 0) {
+            throw new IllegalArgumentException("Despesa não pode ser negativa.");
+        }
+
+        if (despesa > 1000) {
             throw new IllegalArgumentException("Despesa não pode ultrapassar 1000.");
         }
-        this.despesaAdicional = despesa;//aqui diz que a despesa adicional é atribuída ao atributo despesaAdicional, garantindo que a regra de negócio está sendo aplicada corretamente.
+
+        this.despesaAdicional = despesa;
+    }
+
+    public double getDespesaAdicional() {
+        return despesaAdicional;
     }
 
     //aqui o método calcularPagamento é sobrescrito para incluir a despesa adicional no
