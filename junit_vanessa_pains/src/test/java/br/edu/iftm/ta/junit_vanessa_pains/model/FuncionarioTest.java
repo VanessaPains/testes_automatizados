@@ -114,7 +114,7 @@ public class FuncionarioTest {
     //teste para verificar se o método calcularPagamento lança uma exceção quando o pagamento
     //calculado está fora dos limites estabelecidos (menor que 1518 ou maior que 10000), garantindo 
     //que a regra de negócio está sendo aplicada corretamente.
-    void deveLancarErro_quandoPagamentoAbaixoDoMinimo() {
+    void deveLancarExcecao_quandoPagamentoAbaixoDoMinimo() {
 
         // ARRANGE
         Funcionario f = new Funcionario();
@@ -135,7 +135,7 @@ public class FuncionarioTest {
     //teste para verificar se o método calcularPagamento lança uma exceção quando o pagamento
     //calculado está fora dos limites estabelecidos (menor que 1518 ou maior que 10000), garantindo 
     //que a regra de negócio está sendo aplicada corretamente.
-    void deveLancarErro_quandoPagamentoAcimaDoLimite() {
+    void deveLancarExcecao_quandoPagamentoAcimaDoLimite() {
 
         // ARRANGE
         Funcionario f = new Funcionario();

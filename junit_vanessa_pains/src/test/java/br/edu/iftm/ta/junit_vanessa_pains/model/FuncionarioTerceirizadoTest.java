@@ -26,7 +26,7 @@ public class FuncionarioTerceirizadoTest {
 
     @Test
     //ISSO É PARA CALCULO DE PAGAMENTO COM BONUS, COM HORAS TRABALHADAS 100, VALOR HORA 20 E DESPESA ADICIONAL 100, O PAGAMENTO DEVE SER 2000 + 110.
-    void deveCalcularPagamentoComBonus() {//verifica bonnus adicional no cálculo do pagamento, garantindo que a regra de negócio está sendo aplicada corretamente.
+    void deveCalcularPagamentoComBonusCorretamente() {//verifica bonnus adicional no cálculo do pagamento, garantindo que a regra de negócio está sendo aplicada corretamente.
         
         // ARRANGE
         FuncionarioTerceirizado f = new FuncionarioTerceirizado();
@@ -47,7 +47,7 @@ public class FuncionarioTerceirizadoTest {
     //teste para verificar se o método setValorHora lança uma exceção quando o valor da
     //hora é negativo, garantindo que a regra de negócio está sendo aplicada corretamente.
     // TESTE: DESPESA NEGATIVA DEVE GERAR ERRO
-    void deveLancarErro_quandoDespesaNegativa() {
+    void deveLancarExcecao_quandoDespesaNegativa() {
 
         // ARRANGE
         FuncionarioTerceirizado f = new FuncionarioTerceirizado();
