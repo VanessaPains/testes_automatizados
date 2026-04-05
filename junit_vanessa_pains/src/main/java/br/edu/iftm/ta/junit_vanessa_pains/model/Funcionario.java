@@ -79,4 +79,17 @@ public class Funcionario {
             throw new IllegalArgumentException("Valor por hora deve estar entre 1% e 10% do salário mínimo.");
         }
     }
+
+
+    //====== EXTRAS PARA TESTES ======//
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome não pode ser vazio.");
+        }
+        this.nome = nome;
+    }
 }

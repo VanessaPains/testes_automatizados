@@ -151,4 +151,19 @@ public class FuncionarioTest {
         assertEquals("Pagamento fora dos limites.", ex.getMessage());
 
     }
+
+    //======== TESTES EXTRA ========
+    @Test
+    //ISSI PARA DEFINIÇÃO DE NOME VÁLIDO.
+    void deveDefinirNomeValido() {
+
+        // ARRANGE
+        Funcionario f = new Funcionario();
+
+        // ACT
+        f.setNome("Vanessa");
+
+        // ASSERT
+        assertEquals("Vanessa", f.getNome());
+    }
 }
