@@ -1,0 +1,26 @@
+.nav-link {
+	font-family: 'Roboto', sans-serif;
+	color: black;
+	font-size: 1.5em;
+	justify-content: flex-end;
+	margin-right: 15px;
+}
+
+.buttons {
+	width: 8em;
+	height: auto;
+}
+
+body {
+	background: linear-gradient(90deg, rgb(221, 246, 222) 0%,
+		rgb(78, 154, 6) 100%);
+}
+
+label {
+	font-family: 'Roboto', sans-serif;
+	font-size: 1.5em;
+}
+
+.logo {
+	margin-left: 15px;
+}
