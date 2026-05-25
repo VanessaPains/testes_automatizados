@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Optional;
+
 import org.iftm.gerenciadorveterinarios.entities.Animal;
 import org.iftm.gerenciadorveterinarios.repositories.AnimalRepository;
 import org.iftm.gerenciadorveterinarios.servicies.AnimalService;
@@ -43,6 +45,7 @@ public class AnimalServiceTest {
                 5,
                 true);
 
+        // MOCK
         when(repository.save(any())).thenReturn(animalSalvo);
 
         // ACT
@@ -76,4 +79,33 @@ public class AnimalServiceTest {
         verify(repository, never()).save(any());
     }
 
+    @Test
+    @Order(3)
+    public void deveDarAltaParaAnimalInternado() {
+
+        // ARRANGE
+        Integer id = 1;
+
+        Animal animal = new Animal(
+                id,
+                "Rex",
+                "Cachorro",
+                5,
+                true);
+
+        // MOCK
+        when(repository.findById(id)).thenReturn(Optional.of(animal));
+        
+        // MOCK
+        when(repository.save(any())).thenReturn(animal);
+
+        // ACT
+        service.darAlta(id);
+
+        // ASSERT
+        assertFalse(animal.isInternado());
+
+        // VERIFY
+        verify(repository).save(animal);
+    }
 }

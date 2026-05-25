@@ -25,4 +25,14 @@ public class AnimalService {
         return repository.save(animal);
     }
 
+    public Animal darAlta(Integer id) {
+
+        Animal animal = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException(
+                        "Animal não encontrado."));
+
+        animal.setInternado(false);
+
+        return repository.save(animal);
+    }
 }
