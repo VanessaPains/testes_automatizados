@@ -1,0 +1,59 @@
+package org.iftm.gerenciadorveterinarios.service;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+import java.math.BigDecimal;
+
+import org.iftm.gerenciadorveterinarios.entities.Funcionario;
+import org.iftm.gerenciadorveterinarios.repositories.FuncionarioRepository;
+import org.iftm.gerenciadorveterinarios.servicies.FuncionarioService;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
+public class FuncionarioServiceTest {
+
+    @Mock
+    private FuncionarioRepository repository;
+
+    @InjectMocks
+    private FuncionarioService service;
+
+    @Test
+    @Order(1)
+    public void deveCadastrarFuncionarioForaDeFerias() {
+
+        // ARRANGE
+        Funcionario funcionario = new Funcionario(
+                1,
+                "Vanessa",
+                "Desenvolvedora",
+                BigDecimal.valueOf(5000),
+                true);
+
+        Funcionario funcionarioSalvo = new Funcionario(
+                1,
+                "Vanessa",
+                "Desenvolvedora",
+                BigDecimal.valueOf(5000),
+                false);
+
+        // MOCK
+        when(repository.save(any())).thenReturn(funcionarioSalvo);
+
+        // ACT
+        Funcionario resultado = service.cadastrar(funcionario);
+
+        // ASSERT
+        assertFalse(resultado.isEmFerias());
+
+        // VERIFY
+        verify(repository).save(any());
+    }
+}
