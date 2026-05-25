@@ -23,27 +23,25 @@ public class AnimalServiceTest {
     @InjectMocks
     private AnimalService service;
 
-    //Parte 2 - Exercicio A5
+    // Parte 2 - Exercicio A5
     @Test
     @Order(1)
     public void deveCadastrarAnimalComoInternado() {
 
         // ARRANGE
-        Animal animal =
-                new Animal(
-                        1,
-                        "Rex",
-                        "Cachorro",
-                        5,
-                        false);
+        Animal animal = new Animal(
+                1,
+                "Rex",
+                "Cachorro",
+                5,
+                false);
 
-        Animal animalSalvo =
-                new Animal(
-                        1,
-                        "Rex",
-                        "Cachorro",
-                        5,
-                        true);
+        Animal animalSalvo = new Animal(
+                1,
+                "Rex",
+                "Cachorro",
+                5,
+                true);
 
         when(repository.save(any())).thenReturn(animalSalvo);
 
@@ -56,4 +54,26 @@ public class AnimalServiceTest {
         // VERIFY
         verify(repository).save(any());
     }
+
+    @Test
+    @Order(2)
+    public void deveLancarExcecao_quandoEspecieForInvalida() {
+
+        // ARRANGE
+        Animal animal = new Animal(
+                1,
+                "Rex",
+                "Dinossauro",
+                5,
+                false);
+
+        // ACT + ASSERT
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.cadastrar(animal);
+        });
+
+        // VERIFY
+        verify(repository, never()).save(any());
+    }
+
 }

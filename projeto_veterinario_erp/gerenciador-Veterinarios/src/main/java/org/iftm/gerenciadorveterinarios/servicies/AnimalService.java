@@ -11,10 +11,18 @@ public class AnimalService {
     @Autowired
     private AnimalRepository repository;
 
-    public Animal cadastrar(Animal animal){
+    public Animal cadastrar(Animal animal) {
+
+        if (!animal.getEspecie().equalsIgnoreCase("Cachorro")
+                && !animal.getEspecie().equalsIgnoreCase("Gato")) {
+
+            throw new IllegalArgumentException(
+                    "Espécie não atendida.");
+        }
 
         animal.setInternado(true);
 
         return repository.save(animal);
     }
+
 }
