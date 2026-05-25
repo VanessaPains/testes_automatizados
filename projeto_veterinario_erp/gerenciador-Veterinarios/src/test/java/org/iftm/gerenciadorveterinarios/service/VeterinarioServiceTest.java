@@ -135,25 +135,6 @@ public class VeterinarioServiceTest {
     }
 
     @Test
-    @Order(3)
-    public void deveLancarExcecaoAoApagar_quandoIdNaoExistir() {
-
-        // ARRANGE
-        Integer idInexistente = 999;
-
-        when(repositorio.findById(idInexistente))
-                .thenReturn(Optional.empty());
-
-        // ACT + ASSERT
-        assertThrows(RuntimeException.class, () -> {
-            service.apagarPorId(idInexistente);
-        });
-
-        // VERIFY
-        verify(repositorio, never()).delete(any());
-    }
-
-    @Test
     @Order(4)
     public void deveRetornarListaComDoisVeterinarios_quandoBuscarParteDoNome() {
 
@@ -188,4 +169,24 @@ public class VeterinarioServiceTest {
         // VERIFY
         verify(repositorio).findByNomeContains(parteNome);
     }
+
+    @Test
+    @Order(5)
+    public void deveLancarExcecaoAoApagar_quandoIdNaoExistir() {
+
+        // ARRANGE
+        Integer idInexistente = 999;
+
+        when(repositorio.findById(idInexistente)).thenReturn(Optional.empty());
+
+        // ACT + ASSERT
+        assertThrows(RuntimeException.class, () -> {
+            service.apagarPorId(idInexistente);
+        });
+
+        // VERIFY
+        verify(repositorio, never()).delete(any());
+    }
+
+
 }

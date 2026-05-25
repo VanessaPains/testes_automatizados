@@ -40,7 +40,7 @@ public class VeterinarioService {
     }
 
 
-    //test - order (3)
+    //test - order (5) - apagar por id
     @Transactional
     public void apagarPorId(Integer id) {
 
