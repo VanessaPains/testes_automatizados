@@ -25,6 +25,7 @@ public class FuncionarioServiceTest {
     @InjectMocks
     private FuncionarioService service;
 
+    // Parte 2 - Exercicio A5
     @Test
     @Order(1)
     public void deveCadastrarFuncionarioForaDeFerias() {
@@ -56,4 +57,26 @@ public class FuncionarioServiceTest {
         // VERIFY
         verify(repository).save(any());
     }
+
+    @Test
+    @Order(2)
+    public void deveLancarExcecao_quandoSalarioForMenorQueMinimo() {
+
+        // ARRANGE
+        Funcionario funcionario = new Funcionario(
+                1,
+                "Vanessa",
+                "Desenvolvedora",
+                BigDecimal.valueOf(1000),
+                false);
+
+        // ACT + ASSERT
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.cadastrar(funcionario);
+        });
+
+        // VERIFY
+        verify(repository, never()).save(any());
+    }
+
 }
