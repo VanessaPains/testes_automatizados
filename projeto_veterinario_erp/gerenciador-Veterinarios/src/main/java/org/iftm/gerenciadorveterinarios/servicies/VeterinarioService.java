@@ -39,7 +39,7 @@ public class VeterinarioService {
         repositorio.delete(veterinario);
     }
 
-
+    //Parte 1 - Exercicio A5
     //test - order (5) - apagar por id
     @Transactional
     public void apagarPorId(Integer id) {
