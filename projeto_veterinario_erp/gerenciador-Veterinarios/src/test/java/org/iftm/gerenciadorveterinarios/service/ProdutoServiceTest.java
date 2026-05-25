@@ -45,8 +45,7 @@ public class ProdutoServiceTest {
                 10,
                 true);
 
-        when(repository.save(any()))
-                .thenReturn(produtoSalvo);
+        when(repository.save(any())).thenReturn(produtoSalvo);
 
         // ACT
         Produto resultado = service.cadastrar(produto);
@@ -54,7 +53,6 @@ public class ProdutoServiceTest {
         // ASSERT
         assertTrue(resultado.isAtivo());
 
-        verify(repository)
-                .save(any());
+        verify(repository).save(any());
     }
 }
