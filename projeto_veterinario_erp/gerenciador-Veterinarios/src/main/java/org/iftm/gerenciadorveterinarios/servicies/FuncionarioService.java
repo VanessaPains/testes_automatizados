@@ -26,4 +26,16 @@ public class FuncionarioService {
 
         return repository.save(funcionario);
     }
+
+    public Funcionario concederFerias(Integer id) {
+
+        Funcionario funcionario = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException(
+                        "Funcionario não encontrado."));
+
+        funcionario.setEmFerias(true);
+
+        return repository.save(funcionario);
+    }
+
 }

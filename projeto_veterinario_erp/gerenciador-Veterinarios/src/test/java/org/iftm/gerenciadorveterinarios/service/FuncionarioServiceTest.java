@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.iftm.gerenciadorveterinarios.entities.Funcionario;
 import org.iftm.gerenciadorveterinarios.repositories.FuncionarioRepository;
@@ -79,4 +80,35 @@ public class FuncionarioServiceTest {
         verify(repository, never()).save(any());
     }
 
+
+    @Test
+public void deveConcederFeriasParaFuncionario() {
+
+    // ARRANGE
+    Integer id = 1;
+
+    Funcionario funcionario =
+            new Funcionario(
+                    id,
+                    "Vanessa",
+                    "Desenvolvedora",
+                    BigDecimal.valueOf(5000),
+                    false);
+
+    // MOCK
+    when(repository.findById(id)).thenReturn(Optional.of(funcionario));
+
+    // MOCK
+    when(repository.save(any())).thenReturn(funcionario);
+
+    // ACT
+    service.concederFerias(id);
+
+    // ASSERT
+    assertTrue(funcionario.isEmFerias());
+
+    // VERIFY
+    verify(repository)
+            .save(funcionario);
+}
 }
