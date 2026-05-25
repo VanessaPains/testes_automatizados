@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import org.iftm.gerenciadorveterinarios.entities.Veterinario;
@@ -133,7 +134,6 @@ public class VeterinarioServiceTest {
         verify(repositorio).findById(idExistente);
     }
 
-
     @Test
     @Order(3)
     public void deveLancarExcecaoAoApagar_quandoIdNaoExistir() {
@@ -153,4 +153,39 @@ public class VeterinarioServiceTest {
         verify(repositorio, never()).delete(any());
     }
 
+    @Test
+    @Order(4)
+    public void deveRetornarListaComDoisVeterinarios_quandoBuscarParteDoNome() {
+
+        // ARRANGE
+        String parteNome = "Silva";
+
+        Veterinario veterinario1 = new Veterinario(
+                1,
+                "Ana Silva",
+                "",
+                "",
+                BigDecimal.valueOf(3000));
+
+        Veterinario veterinario2 = new Veterinario(
+                2,
+                "Carlos Silva",
+                "",
+                "",
+                BigDecimal.valueOf(4000));
+
+        List<Veterinario> listaEsperada = List.of(veterinario1, veterinario2);
+
+        // MOCK
+        when(repositorio.findByNomeContains(parteNome)).thenReturn(listaEsperada);
+
+        // ACT
+        List<Veterinario> resultado = service.buscaVeterinariosComParteNome(parteNome);
+
+        // ASSERT
+        assertEquals(2, resultado.size());
+
+        // VERIFY
+        verify(repositorio).findByNomeContains(parteNome);
+    }
 }
