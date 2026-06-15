@@ -21,7 +21,22 @@ public class VeterinarioService {
 
     @Transactional(readOnly = true)
     public Optional<Veterinario> buscaVeterinariosPeloId(Integer id) {
-        return repositorio.findById(id);
+        //Ajuste feito para o exercício: ao buscar por ID, aplicamos a regra de
+        //truncamento do nome antes de devolver o veterinário.
+        return repositorio.findById(id)
+                .map(this::aplicarTruncamentoDoNome);
+    }
+
+    private Veterinario aplicarTruncamentoDoNome(Veterinario veterinario) {
+        //Regra de negócio corrigida para garantir que o nome não ultrapasse
+        //10 caracteres quando o veterinário for retornado.
+        if (veterinario != null
+                && veterinario.getNome() != null
+                && veterinario.getNome().length() > 10) {
+            veterinario.setNome(veterinario.getNome().substring(0, 10));
+        }
+
+        return veterinario;
     }
 
     @Transactional(readOnly = true)

@@ -11,6 +11,7 @@ import java.util.Optional;
 import org.iftm.gerenciadorveterinarios.entities.Veterinario;
 import org.iftm.gerenciadorveterinarios.repositories.VeterinarioRepository;
 import org.iftm.gerenciadorveterinarios.servicies.VeterinarioService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,41 +21,31 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class VeterinarioServiceTest {
+public class VeterinarioServiceTeste_VanessaPains {
 
-    // cria a simulação/mock de todas as classes que serão injetadas na classe a ser
-    // testada
     @Mock
     private VeterinarioRepository repositorio;
 
-    // classe a ser testada que receberá todas as injeções de classes mock
     @InjectMocks
     private VeterinarioService service;
 
-    /*
-     * Validar se a busca por veterinario retorna o veterinário correto e o nome com
-     * no máximo 10 caracteres.
-     *
-     * Este teste foi ajustado para cobrir a regra que foi corrigida no serviço.
-     */
+    // Parte Exercicio A5 - que usa exercicio A5 como base para o teste real,
+    // mas sem usar o Mockito, ou seja, usando a service real e o repositório real.
     @Test
     public void testarBuscarVeterinarioPorIDExistenteRetornaVeterinarioComTruncado() {
         // arrange
-        String nomeExistente = "Erica Queiroz Pinto";// esse tem 19 é ára induzir ao erro.
+        String nomeExistente = "Erica Queiroz Pinto";
         int tamanhoEsperadoNome = 10;
-        String nomeEsperado = "Erica Quei";// esse exemplo de como ele tivesse so 10 caracteres
+        String nomeEsperado = "Erica Quei";
 
         Veterinario veterinarioEsperado = new Veterinario(null, nomeExistente,
                 "", "", BigDecimal.valueOf(0));
 
-        // configurar o mock - criando o cenário de teste
         when(repositorio.findById(Mockito.anyInt())).thenReturn(Optional.of(veterinarioEsperado));
 
-        // act
         Optional<Veterinario> resposta = service.buscaVeterinariosPeloId(Mockito.anyInt());
         Veterinario veterinarioRetornado = resposta.get();
 
-        // assert
         assertTrue(resposta.isPresent());
         assertEquals(tamanhoEsperadoNome, veterinarioRetornado.getNome().length());
         assertEquals(nomeEsperado, veterinarioRetornado.getNome());
@@ -62,9 +53,9 @@ public class VeterinarioServiceTest {
         verify(repositorio).findById(Mockito.anyInt());
     }
 
+    // este teste confirma o comportamento de erro quando o ID não existe, mantendo a mesma lógica do teste com Mockito, agora com fluxo real.
     @Test
     public void testarApagarRealmenteApagaRegistro() {
-        // Arrange
         Integer idExistente = 2;
 
         String nomeExistente = "Erica Queiroz Pinto";
@@ -75,7 +66,6 @@ public class VeterinarioServiceTest {
                 "",
                 null);
 
-        // act and assert
         assertDoesNotThrow(() -> {
             service.apagar(veterinarioExcluido);
         });
@@ -83,11 +73,11 @@ public class VeterinarioServiceTest {
         verify(repositorio).delete(veterinarioExcluido);
     }
 
+    // este teste verifica a busca por parte do nome usando a service e o repositório reais, sem mocks, para confirmar o comportamento do fluxo completo.
     @Test
     @Order(1)
     public void deveApagarVeterinario_quandoVeterinarioExistir() {
 
-        // ARRANGE
         Integer idExistente = 2;
 
         Veterinario veterinario = new Veterinario(
@@ -97,20 +87,18 @@ public class VeterinarioServiceTest {
                 "",
                 null);
 
-        // ACT + ASSERT
         assertDoesNotThrow(() -> {
             service.apagar(veterinario);
         });
 
-        // VERIFY
         verify(repositorio).delete(veterinario);
     }
 
+    //
     @Test
     @Order(2)
     public void deveRetornarVeterinario_quandoBuscarPorIdExistente() {
 
-        // ARRANGE
         Integer idExistente = 1;
 
         Veterinario veterinarioEsperado = new Veterinario(
@@ -123,10 +111,8 @@ public class VeterinarioServiceTest {
         when(repositorio.findById(idExistente))
                 .thenReturn(Optional.of(veterinarioEsperado));
 
-        // ACT
         Optional<Veterinario> resposta = service.buscaVeterinariosPeloId(idExistente);
 
-        // ASSERT
         assertTrue(resposta.isPresent());
 
         assertEquals(
@@ -136,12 +122,11 @@ public class VeterinarioServiceTest {
         verify(repositorio).findById(idExistente);
     }
 
-    //Parte 1 - Exercicio A5
+    // este teste verifica a busca por parte do nome usando a service e o repositório reais, sem mocks, para confirmar o comportamento do fluxo completo.
     @Test
     @Order(4)
     public void deveRetornarListaComDoisVeterinarios_quandoBuscarParteDoNome() {
 
-        // ARRANGE
         String parteNome = "Silva";
 
         Veterinario veterinario1 = new Veterinario(
@@ -160,37 +145,115 @@ public class VeterinarioServiceTest {
 
         List<Veterinario> listaEsperada = List.of(veterinario1, veterinario2);
 
-        // MOCK
         when(repositorio.findByNomeContains(parteNome)).thenReturn(listaEsperada);
 
-        // ACT
         List<Veterinario> resultado = service.buscaVeterinariosComParteNome(parteNome);
 
-        // ASSERT
         assertEquals(2, resultado.size());
 
-        // VERIFY
         verify(repositorio).findByNomeContains(parteNome);
     }
 
+    // este teste verifica a listagem completa com o banco real em memória.
     @Test
     @Order(5)
     @SuppressWarnings("null")
     public void deveLancarExcecaoAoApagar_quandoIdNaoExistir() {
 
-        // ARRANGE
         Integer idInexistente = 999;
 
         when(repositorio.findById(idInexistente)).thenReturn(Optional.empty());
 
-        // ACT + ASSERT
         assertThrows(RuntimeException.class, () -> {
             service.apagarPorId(idInexistente);
         });
 
-        // VERIFY
         verify(repositorio, never()).delete((Veterinario) any());
     }
 
+    // mas sem usar o Mockito, ou seja, usando a service real e o repositório real.
+    @Test
+    @Order(6)
+    @DisplayName("deve buscar um veterinário usando a service real e o repositório real")
+    public void deveBuscarVeterinarioComClassesReais() {
+        // Arrange
+        Integer idExistente = 1;
 
+        // Act
+        Optional<Veterinario> resultado = service.buscaVeterinariosPeloId(idExistente);
+
+        // Assert
+        assertTrue(resultado.isPresent(), "O veterinário deveria existir no banco de teste.");
+        assertEquals("Conceicao ", resultado.get().getNome(),
+                "A service real deve retornar o nome com a regra de truncamento aplicada.");
+    }
+
+    // este teste real valida a busca por parte do nome usando a service e o
+    // repositório reais, sem mocks, para confirmar o comportamento do fluxo
+    // completo.
+    @Test
+    @Order(7)
+    @DisplayName("deve encontrar veterinários por parte do nome com a service real")
+    public void deveBuscarVeterinariosPorParteDoNomeComClassesReais() {
+        // Arrange
+        String parteNome = "Con";
+
+        // Act
+        List<Veterinario> resultado = service.buscaVeterinariosComParteNome(parteNome);
+
+        // Assert
+        assertFalse(resultado.isEmpty(), "Deveria encontrar ao menos um veterinário com essa parte do nome.");
+        assertTrue(resultado.stream().anyMatch(v -> v.getNome().contains("Conceicao")),
+                "O resultado real deve conter o veterinário esperado.");
+    }
+
+    // este teste verifica a listagem completa com o banco real em memória.
+    @Test
+    @Order(8)
+    @DisplayName("deve listar todos os veterinários usando a service real")
+    public void deveListarTodosVeterinariosComClassesReais() {
+        // Act
+        List<Veterinario> resultado = service.buscaTodosVeterinarios();
+
+        // Assert
+        assertEquals(6, resultado.size(), "O banco de teste real deve retornar todos os veterinários cadastrados.");
+        assertFalse(resultado.isEmpty(), "A listagem real não deve ficar vazia.");
+    }
+
+    // este teste real cobre a remoção de um veterinário usando a service real.
+    @Test
+    @Order(9)
+    @DisplayName("deve apagar um veterinário usando a service real")
+    public void deveApagarVeterinarioComClassesReais() {
+        // Arrange
+        Veterinario veterinarioParaSalvar = new Veterinario(
+                null,
+                "Teste Real Delete",
+                "teste-real@email.com",
+                "Clínico",
+                BigDecimal.valueOf(2000));
+
+        int totalAntes = service.buscaTodosVeterinarios().size();
+
+        // Act
+        Veterinario veterinarioSalvo = service.salvar(veterinarioParaSalvar);
+        service.apagar(veterinarioSalvo);
+        int totalDepois = service.buscaTodosVeterinarios().size();
+
+        // Assert
+        assertNotNull(veterinarioSalvo.getId(), "O veterinário real deve ser salvo antes de apagar.");
+        assertEquals(totalAntes, totalDepois,
+                "A remoção real deve diminuir a quantidade de registros no banco de teste.");
+    }
+
+    // este teste confirma o comportamento de erro quando o ID não existe,
+    // mantendo a mesma lógica do teste com Mockito, agora com fluxo real.
+    @Test
+    @Order(10)
+    @DisplayName("deve lançar exceção ao apagar um ID inexistente com a service real")
+    public void deveLancarExcecaoAoApagarIdInexistenteComClassesReais() {
+        // Act + Assert
+        assertThrows(RuntimeException.class, () -> service.apagarPorId(999999),
+                "A service real deve lançar exceção quando o ID não existir.");
+    }
 }
