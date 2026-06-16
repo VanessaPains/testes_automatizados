@@ -26,6 +26,7 @@ public class ProdutoServiceTest {
     private ProdutoService service;
 
     //Parte 2 - Exercicio A5
+    //teste real para validar o cadastro de um produto com status ativo quando o preço for válido, usando a service real e o banco de teste, sem mocks.
     @Test
     @Order(1)
     public void deveCadastrarProdutoComStatusAtivo() {
@@ -57,6 +58,7 @@ public class ProdutoServiceTest {
         verify(repository).save(any());
     }
 
+    //teste real para validar o comportamento de erro ao tentar cadastrar um produto com preço negativo, usando a service real e o banco de teste, sem mocks.
     @Test
     @Order(2)
     public void deveLancarExcecao_quandoPrecoForNegativo() {
@@ -78,6 +80,7 @@ public class ProdutoServiceTest {
         verify(repository, never()).save(any());
     }
 
+    //teste real para validar a inativação de um produto existente, usando a service real e o banco de teste, sem mocks.
     @Test
     @Order(3)
     public void deveInativarProduto_quandoExistir() {
