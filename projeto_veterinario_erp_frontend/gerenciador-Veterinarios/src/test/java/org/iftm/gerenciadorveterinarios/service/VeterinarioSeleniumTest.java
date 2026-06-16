@@ -59,7 +59,7 @@ public class VeterinarioSeleniumTest {
     static {
         long f = 0L;
         try {
-            f = Long.parseLong(System.getProperty("selenium.fieldFillDuration", "500"));
+            f = Long.parseLong(System.getProperty("selenium.fieldFillDuration", "400"));
             if (f < 0) f = 0L;
         } catch (NumberFormatException ex) {
             f = 0L;
@@ -330,7 +330,7 @@ public class VeterinarioSeleniumTest {
 
         // Atualiza email e salário e submete
         String novoEmail = "selenium.atualizado@example.com";
-        String novoSalario = "4500.00";
+        String novoSalario = "9800.00";
 
         fillVeterinarioForm(nome, novoEmail, especialidade, novoSalario);
         submitForm();
