@@ -40,6 +40,14 @@ public class Funcionario {
         return id;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
     public BigDecimal getSalario() {
         return salario;
     }
