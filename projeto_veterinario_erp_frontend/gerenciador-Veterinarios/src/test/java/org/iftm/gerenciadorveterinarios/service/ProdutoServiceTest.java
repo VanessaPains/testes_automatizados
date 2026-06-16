@@ -1,0 +1,107 @@
+package org.iftm.gerenciadorveterinarios.service;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+import java.math.BigDecimal;
+
+import org.iftm.gerenciadorveterinarios.entities.Produto;
+import org.iftm.gerenciadorveterinarios.repositories.ProdutoRepository;
+import org.iftm.gerenciadorveterinarios.servicies.ProdutoService;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
+public class ProdutoServiceTest {
+
+    @Mock
+    private ProdutoRepository repository;
+
+    @InjectMocks
+    private ProdutoService service;
+
+    //Parte 2 - Exercicio A5
+    @Test
+    @Order(1)
+    public void deveCadastrarProdutoComStatusAtivo() {
+
+        // ARRANGE
+        Produto produto = new Produto(
+                1,
+                "Ração Premium",
+                BigDecimal.valueOf(150),
+                10,
+                false);
+
+        Produto produtoSalvo = new Produto(
+                1,
+                "Ração Premium",
+                BigDecimal.valueOf(150),
+                10,
+                true);
+
+        // MOCK
+        when(repository.save(any())).thenReturn(produtoSalvo);
+
+        // ACT
+        Produto resultado = service.cadastrar(produto);
+
+        // ASSERT
+        assertTrue(resultado.isAtivo());
+
+        verify(repository).save(any());
+    }
+
+    @Test
+    @Order(2)
+    public void deveLancarExcecao_quandoPrecoForNegativo() {
+
+        // ARRANGE
+        Produto produto = new Produto(
+                2,
+                "Coleira",
+                java.math.BigDecimal.valueOf(-10),
+                5,
+                false);
+
+        // ACT + ASSERT
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.cadastrar(produto);
+        });
+
+        // VERIFY
+        verify(repository, never()).save(any());
+    }
+
+    @Test
+    @Order(3)
+    public void deveInativarProduto_quandoExistir() {
+
+        // ARRANGE
+        Integer id = 1;
+
+        Produto produto = new Produto(
+                id,
+                "Ração",
+                java.math.BigDecimal.valueOf(50),
+                20,
+                true);
+
+        when(repository.findById(id)).thenReturn(java.util.Optional.of(produto));
+        when(repository.save(any())).thenReturn(produto);
+
+        // ACT
+        Produto resultado = service.inativar(id);
+
+        // ASSERT
+        assertFalse(resultado.isAtivo());
+
+        // VERIFY
+        verify(repository).save(produto);
+    }
+}

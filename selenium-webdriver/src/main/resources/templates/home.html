@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Gerenciador de Veterinários</title>
+</head>
+<body>
+    <h1>Gerenciador de Veterinários</h1>
+
+    <div>
+        <form action="/home" method="get">
+            <label for="pesquisa">Pesquisar:</label>
+            <input type="text" id="pesquisa" name="pesquisa" th:value="${pesquisa}" />
+            <button type="submit">Pesquisar</button>
+        </form>
+    </div>
+
+    <div>
+        <form action="/veterinarios" method="post">
+            <input type="hidden" id="id" name="id" th:value="${veterinario.id}" />
+            <div>
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" th:value="${veterinario.nome}" required />
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" th:value="${veterinario.email}" required />
+            </div>
+            <div>
+                <label for="especialidade">Especialidade:</label>
+                <input type="text" id="especialidade" name="especialidade" th:value="${veterinario.especialidade}" required />
+            </div>
+            <div>
+                <label for="salario">Salário:</label>
+                <input type="text" id="salario" name="salario" th:value="${veterinario.salario}" required />
+            </div>
+            <div>
+                <button type="submit" th:text="${modoEdicao} ? 'Salvar' : 'Cadastrar'"></button>
+            </div>
+        </form>
+    </div>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Especialidade</th>
+                <th>Salário</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="vet, iterStat : ${veterinarios}">
+                <td th:text="${iterStat.index + 1}"></td>
+                <td th:text="${vet.nome}"></td>
+                <td th:text="${vet.email}"></td>
+                <td th:text="${vet.especialidade}"></td>
+                <td th:text="${vet.salario}"></td>
+                <td>
+                    <form th:action="@{/veterinarios/{id}/editar(id=${vet.id})}" method="get" style="display:inline-block;">
+                        <button type="submit">Alterar</button>
+                    </form>
+                    <form th:action="@{/veterinarios/{id}/excluir(id=${vet.id})}" method="get" style="display:inline-block;">
+                        <button type="submit">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
